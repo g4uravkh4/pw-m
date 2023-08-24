@@ -7,5 +7,5 @@ export const environment = {
     authDomain: 'pw-manager-3169e.firebaseapp.com',
     messagingSenderId: '46208864525',
   },
-  production: false,
+  production: true,
 };
