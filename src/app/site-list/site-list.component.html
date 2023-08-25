@@ -14,13 +14,13 @@
   <!-- add new site form -->
 
   <div class="px-20 py-20 mb-10 my-5 border-4 border-gray-900">
-    <h2 class="text-3xl text-center">Add New Site</h2>
+    <h2 class="text-3xl text-center">{{ formState }} Site</h2>
     <p class="text-center">You can add a new site from the below form</p>
     <form #f="ngForm" (ngSubmit)="onSubmit(f.value)">
       <div class="flex flex-col">
         <label class="text-lg font-medium mb-2">Site Name</label>
         <input
-          ngModel
+          [(ngModel)]="siteName"
           type="text"
           name="siteName"
           class="border-2 border-gray-900 p-2 rounded-lg w-full"
@@ -29,7 +29,7 @@
       <div class="flex flex-col">
         <label class="text-lg font-medium mb-2">Site URL</label>
         <input
-          ngModel
+          [(ngModel)]="siteURL"
           type="text"
           name="siteUrl"
           class="border-2 border-gray-900 p-2 rounded-lg w-full"
@@ -38,7 +38,7 @@
       <div class="flex flex-col">
         <label class="text-lg font-medium mb-2">Site Image URL</label>
         <input
-          ngModel
+          [(ngModel)]="siteImageURL"
           type="text"
           name="siteImageUrl"
           class="border-2 border-gray-900 p-2 rounded-lg w-full"
@@ -47,7 +47,7 @@
       <button
         class="mt-10 mx-0.5 px-5 py-3 text-sm bg-gray-900 text-white shadow rounded-md"
       >
-        Add New Site
+        {{ formState }} Site
       </button>
       <button
         class="mt-10 mx-0.5 px-5 py-3 text-sm border-2 border-gray-900 text-gray-900 shadow rounded-md"
@@ -74,11 +74,15 @@
         Add New Password
       </button>
       <button
+        (click)="
+          editSite(site.siteName, site.siteUrl, site.siteImageUrl, site.id)
+        "
         class="mt-10 mx-0.5 px-5 py-3 text-sm border-2 border-gray-900 text-gray-900 shadow rounded-md"
       >
         Edit
       </button>
       <button
+        (click)="deleteList(site.id)"
         class="mt-10 mx-0.5 px-5 py-3 text-sm border-2 border-gray-900 text-gray-900 shadow rounded-md"
       >
         Delete
