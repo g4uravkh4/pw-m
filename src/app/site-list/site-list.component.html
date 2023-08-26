@@ -11,6 +11,11 @@
     Add New Site
   </button>
 
+  <!-- alert -->
+  <div *ngIf="isSuccess" class="p-5 my-3 bg-teal-100 text-teal-900">
+    {{ successMessage }}
+  </div>
+
   <!-- add new site form -->
 
   <div class="px-20 py-20 mb-10 my-5 border-4 border-gray-900">
