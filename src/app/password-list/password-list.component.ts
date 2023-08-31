@@ -16,6 +16,13 @@ export class PasswordListComponent {
 
   passwordList!: Observable<Array<any>>;
 
+  email!: string;
+  username!: string;
+  password!: string;
+  passwordId!: string;
+
+  formState: string = 'Add New';
+
   constructor(
     private route: ActivatedRoute,
     private service: PasswordManagerService
@@ -45,5 +52,19 @@ export class PasswordListComponent {
 
   loadPasswords() {
     this.passwordList = this.service.loadPasswords(this.siteId);
+  }
+
+  editPassword(
+    email: string,
+    username: string,
+    password: string,
+    passwordId: string
+  ) {
+    this.email = email;
+    this.username = username;
+    this.password = password;
+    this.passwordId = passwordId;
+
+    this.formState = 'Edit';
   }
 }
