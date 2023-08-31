@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { PasswordManagerService } from '../password-manager.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-password-list',
@@ -12,7 +14,12 @@ export class PasswordListComponent {
   siteUrl!: string;
   siteImgUrl!: string;
 
-  constructor(private route: ActivatedRoute) {
+  passwordList!: Observable<Array<any>>;
+
+  constructor(
+    private route: ActivatedRoute,
+    private service: PasswordManagerService
+  ) {
     this.route.queryParams.subscribe((val: any) => {
       console.log(val);
       this.siteId = val.id;
@@ -20,9 +27,23 @@ export class PasswordListComponent {
       this.siteUrl = val.siteUrl;
       this.siteImgUrl = val.siteImageUrl;
     });
+
+    this.loadPasswords();
   }
 
   onSubmit(values: object) {
-    console.log(values);
+    this.service
+      .addPassword(values, this.siteId)
+      .then(() => {
+        alert('Password added successfully');
+      })
+      .catch((err) => {
+        console.log(err);
+        alert('Something went wrong');
+      });
+  }
+
+  loadPasswords() {
+    this.passwordList = this.service.loadPasswords(this.siteId);
   }
 }
