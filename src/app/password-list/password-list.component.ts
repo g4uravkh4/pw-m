@@ -23,6 +23,9 @@ export class PasswordListComponent {
 
   formState: string = 'Add New';
 
+  isSuccess: boolean = false;
+  successMessage: string = 'Password added successfully!';
+
   constructor(
     private route: ActivatedRoute,
     private service: PasswordManagerService
@@ -38,16 +41,39 @@ export class PasswordListComponent {
     this.loadPasswords();
   }
 
+  showAlert(message: string) {
+    this.isSuccess = true;
+    this.successMessage = message;
+  }
+
+  resetForm() {
+    this.email = '';
+    this.username = '';
+    this.password = '';
+    this.formState = 'Add New';
+    this.passwordId = '';
+  }
+
   onSubmit(values: object) {
-    this.service
-      .addPassword(values, this.siteId)
-      .then(() => {
-        alert('Password added successfully');
-      })
-      .catch((err) => {
-        console.log(err);
-        alert('Something went wrong');
-      });
+    if (this.formState === 'Add New') {
+      this.service
+        .addPassword(values, this.siteId)
+        .then(() => {
+          this.resetForm();
+          this.showAlert('Password added successfully!');
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Something went wrong');
+        });
+    } else if (this.formState == 'Edit') {
+      this.service
+        .updatePassowrd(this.siteId, this.passwordId, values)
+        .then(() => {
+          this.showAlert('Password updated successfully!');
+          this.resetForm();
+        });
+    }
   }
 
   loadPasswords() {
@@ -66,5 +92,17 @@ export class PasswordListComponent {
     this.passwordId = passwordId;
 
     this.formState = 'Edit';
+  }
+
+  deletePassword(passwordId: string) {
+    this.service
+      .deletePassword(this.siteId, passwordId)
+      .then(() => {
+        this.showAlert('Password deleted successfully!');
+      })
+      .catch((err) => {
+        console.log(err);
+        alert('Something went wrong');
+      });
   }
 }
