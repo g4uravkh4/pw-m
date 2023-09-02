@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PasswordManagerService } from '../password-manager.service';
 import { Observable } from 'rxjs';
+import { AES, enc } from 'crypto-js';
 
 @Component({
   selector: 'app-password-list',
@@ -54,7 +55,10 @@ export class PasswordListComponent {
     this.passwordId = '';
   }
 
-  onSubmit(values: object) {
+  onSubmit(values: any) {
+    const encryptedPassword = this.encryptPassword(values.password);
+    values.password = encryptedPassword;
+
     if (this.formState === 'Add New') {
       this.service
         .addPassword(values, this.siteId)
@@ -104,5 +108,11 @@ export class PasswordListComponent {
         console.log(err);
         alert('Something went wrong');
       });
+  }
+
+  encryptPassword(password: string) {
+    const secretKey = '7E139C45D1D456E96EC12661451C3';
+    const encPassword = AES.encrypt(password, secretKey).toString();
+    return encPassword;
   }
 }
