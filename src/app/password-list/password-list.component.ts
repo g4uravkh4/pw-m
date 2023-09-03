@@ -15,7 +15,7 @@ export class PasswordListComponent {
   siteUrl!: string;
   siteImgUrl!: string;
 
-  passwordList!: Observable<Array<any>>;
+  passwordList!: Array<any>;
 
   email!: string;
   username!: string;
@@ -81,7 +81,9 @@ export class PasswordListComponent {
   }
 
   loadPasswords() {
-    this.passwordList = this.service.loadPasswords(this.siteId);
+    this.service.loadPasswords(this.siteId).subscribe((data: any) => {
+      this.passwordList = data;
+    });
   }
 
   editPassword(
@@ -112,7 +114,18 @@ export class PasswordListComponent {
 
   encryptPassword(password: string) {
     const secretKey = '7E139C45D1D456E96EC12661451C3';
-    const encPassword = AES.encrypt(password, secretKey).toString();
-    return encPassword;
+    const encPw = AES.encrypt(password, secretKey).toString();
+    return encPw;
+  }
+
+  isDescryptPassword(password: string) {
+    const secretKey = '7E139C45D1D456E96EC12661451C3';
+    const decPw = AES.decrypt(password, secretKey).toString(enc.Utf8);
+    return decPw;
+  }
+
+  onDecrypt(password: string, index: number) {
+    const decPw = this.isDescryptPassword(password);
+    this.passwordList[index].password = decPw;
   }
 }
